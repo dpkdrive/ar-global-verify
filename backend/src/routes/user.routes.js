@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { createUser, deactivateUser, listUsers, updateUser } from '../controllers/user.controller.js';
+import { authorize, requireAuth } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
+import { createUserSchema, listUsersSchema, updateUserSchema, userIdSchema } from '../validators/user.validator.js';
+import { asyncHandler } from '../utils/async-handler.js';
+const router = Router();
+router.use(requireAuth, authorize('admin'));
+router.route('/').get(validate(listUsersSchema), asyncHandler(listUsers)).post(validate(createUserSchema), asyncHandler(createUser));
+router.route('/:id').patch(validate(updateUserSchema), asyncHandler(updateUser)).delete(validate(userIdSchema), asyncHandler(deactivateUser));
+export default router;

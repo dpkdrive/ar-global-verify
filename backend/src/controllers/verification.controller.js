@@ -1,7 +1,9 @@
 import crypto from 'node:crypto';
 import Product from '../models/product.model.js';
+import ProductCode from '../models/product-code.model.js';
 import VerificationEvent from '../models/verification-event.model.js';
 import { sendSuccess } from '../utils/api-response.js';
+import { hashAuthenticationCode } from '../services/product-code.service.js';
 
 const hashIp = (ip) => crypto.createHash('sha256').update(ip ?? '').digest('hex');
 const publicProduct = (product) => ({ id: product.id, name: product.name, brand: product.brand, sku: product.sku, category: product.category, batchNumber: product.batchNumber, description: product.description, imageUrl: product.imageUrl });
@@ -12,10 +14,22 @@ export const verifyProduct = async (req, res) => {
   // The validator has already normalized blank optional contact fields.
   const { email, mobile } = req.body;
 
-  const product = await Product.findOne({ authenticationCode: code });
+  const generatedCode = await ProductCode.findOne({ codeHash: hashAuthenticationCode(code) }).populate('product');
+  const product = generatedCode?.product ?? await Product.findOne({ authenticationCode: code });
   let outcome = !product ? 'not_found' : product.status === 'active' ? 'verified' : 'inactive';
 
-  if (product?.status === 'active') {
+  if (generatedCode && product?.status === 'active') {
+    if (generatedCode.status !== 'active') {
+      outcome = 'inactive';
+    } else {
+      const redeemedCode = await ProductCode.findOneAndUpdate(
+        { _id: generatedCode._id, status: 'active', verifiedAt: { $exists: false } },
+        { $set: { verifiedAt: new Date() } },
+        { new: true }
+      );
+      outcome = redeemedCode ? 'verified' : 'already_verified';
+    }
+  } else if (product?.status === 'active') {
     // Codes verified before firstVerifiedAt was introduced are treated as
     // redeemed too, so existing verification history keeps its meaning.
     const previousVerification = !product.firstVerifiedAt
@@ -45,6 +59,7 @@ export const verifyProduct = async (req, res) => {
 
   await VerificationEvent.create({
     product: product?._id,
+    verificationCode: generatedCode?._id,
     code,
     outcome,
     email,

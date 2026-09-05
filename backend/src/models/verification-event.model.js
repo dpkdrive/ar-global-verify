@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const verificationEventSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', index: true },
+  verificationCode: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductCode', index: true },
   code: { type: String, required: true, uppercase: true, trim: true },
   outcome: { type: String, enum: ['verified', 'already_verified', 'not_found', 'inactive'], required: true, index: true },
   email: { type: String, trim: true, lowercase: true, maxlength: 200 },

@@ -10,6 +10,9 @@ const productSchema = new mongoose.Schema({
   category: { type: String, trim: true, maxlength: 100, index: true },
   batchNumber: { type: String, trim: true, maxlength: 100, index: true },
   authenticationCode: { type: String, required: true, unique: true, trim: true, uppercase: true, immutable: true },
+  // A code is redeemed on its first successful public verification. Keeping
+  // this on Product makes the first-scan decision atomic across requests.
+  firstVerifiedAt: { type: Date },
   status: { type: String, enum: ['active', 'disabled', 'recalled'], default: 'active', index: true },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
   metadata: { type: Map, of: String, default: {} },

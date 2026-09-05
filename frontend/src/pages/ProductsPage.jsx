@@ -9,6 +9,8 @@ import {
   Clock3,
   Edit3,
   History,
+  Mail,
+  Phone,
   Plus,
   Search,
   Trash2,
@@ -998,7 +1000,7 @@ export default function ProductsPage() {
 
                 <div
                   key={event._id}
-                  className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4"
                 >
 
                   <div className="flex items-center gap-3">
@@ -1032,7 +1034,16 @@ export default function ProductsPage() {
 
                   </div>
 
-                  <ArrowRight className="h-4 w-4 text-slate-300" />
+                  <div className="flex flex-col gap-1 text-xs sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-200">
+                    <div className="flex items-center sm:justify-end gap-1.5 font-semibold text-slate-800">
+                      <Mail className="h-3.5 w-3.5 text-slate-400" />
+                      <span>{event.email || "No Email"}</span>
+                    </div>
+                    <div className="flex items-center sm:justify-end gap-1.5 text-slate-500">
+                      <Phone className="h-3.5 w-3.5 text-slate-400" />
+                      <span>{event.mobile || "No Mobile"}</span>
+                    </div>
+                  </div>
 
                 </div>
 

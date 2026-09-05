@@ -7,7 +7,9 @@ import {
   BadgeCheck,
   Boxes,
   Clock3,
+  Mail,
   PackageCheck,
+  Phone,
   ShieldCheck,
   TrendingUp,
 } from "lucide-react";
@@ -323,6 +325,10 @@ export default function DashboardPage() {
                     </th>
 
                     <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-wider text-slate-400">
+                      User Contact
+                    </th>
+
+                    <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-wider text-slate-400">
                       Outcome
                     </th>
 
@@ -378,6 +384,24 @@ export default function DashboardPage() {
                           <span className="rounded-md bg-slate-100 px-2.5 py-1 font-mono text-xs font-semibold text-slate-600">
                             {event.product.sku}
                           </span>
+
+                        </td>
+
+
+                        {/* User Contact */}
+
+                        <td className="px-6 py-5">
+
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
+                              <Mail className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                              <span>{event.email || "N/A"}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                              <Phone className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                              <span>{event.mobile || "N/A"}</span>
+                            </div>
+                          </div>
 
                         </td>
 

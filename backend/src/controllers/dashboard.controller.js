@@ -25,8 +25,8 @@ export const getDashboardSummary = async (req, res) => {
           totals: [{ $group: { _id: '$outcome', count: { $sum: 1 } } }],
           recent: [
             { $sort: { createdAt: -1 } },
-            { $limit: 5 },
-            { $project: { outcome: 1, createdAt: 1, product: { id: '$product._id', name: '$product.name', sku: '$product.sku', brand: '$product.brand' } } },
+            { $limit: 10 },
+            { $project: { outcome: 1, createdAt: 1, email: 1, mobile: 1, code: 1, product: { id: '$product._id', name: '$product.name', sku: '$product.sku', brand: '$product.brand' } } },
           ],
         },
       },
@@ -36,7 +36,7 @@ export const getDashboardSummary = async (req, res) => {
   const products = { total: 0, active: 0, disabled: 0, recalled: 0 };
   productStatuses.forEach(({ _id, count }) => { products.total += count; products[_id] = count; });
 
-  const outcomes = { total: 0, verified: 0, inactive: 0, not_found: 0 };
+  const outcomes = { total: 0, verified: 0, already_verified: 0, inactive: 0, not_found: 0 };
   const eventTotals = verificationData[0]?.totals ?? [];
   eventTotals.forEach(({ _id, count }) => { outcomes.total += count; outcomes[_id] = count; });
 
@@ -56,7 +56,7 @@ export const listSuspiciousProducts = async (req, res) => {
   const ownerMatch = req.user.role === 'admin' ? {} : { 'product.owner': req.user._id };
 
   const [result] = await VerificationEvent.aggregate([
-    { $match: { outcome: 'verified', product: { $ne: null } } },
+    { $match: { outcome: { $in: ['verified', 'already_verified'] }, product: { $ne: null } } },
     { $group: { _id: '$product', verificationCount: { $sum: 1 }, lastVerifiedAt: { $max: '$createdAt' } } },
     { $match: { verificationCount: { $gte: env.SUSPICIOUS_VERIFICATION_THRESHOLD } } },
     { $lookup: { from: 'products', localField: '_id', foreignField: '_id', as: 'product' } },

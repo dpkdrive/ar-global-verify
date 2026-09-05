@@ -4,7 +4,9 @@ import {
   ArrowRight,
   BadgeCheck,
   CheckCircle2,
+  Mail,
   PackageCheck,
+  Phone,
   Search,
   ShieldCheck,
   XCircle,
@@ -17,12 +19,13 @@ const INITIAL_CODE = "";
 
 export default function VerifyPage() {
   const [code, setCode] = useState(INITIAL_CODE);
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-
-  console.log("Result:", result);
+  console.log(result?.product?.name, "name")
   /**
    * Handle authentication code input
    */
@@ -46,9 +49,6 @@ export default function VerifyPage() {
   /**
    * Verify product
    */
-  /**
-   * Verify product
-   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -59,10 +59,16 @@ export default function VerifyPage() {
     setResult(null);
 
     try {
+      // Do not send empty optional fields. This keeps the public request
+      // compatible with the API and avoids storing blank contact values.
+      const normalizedEmail = email.trim();
+      const normalizedMobile = mobile.trim();
       const response = await apiRequest("/verify", {
         method: "POST",
         body: {
-          code,
+          code: code.trim(),
+          ...(normalizedEmail && { email: normalizedEmail }),
+          ...(normalizedMobile && { mobile: normalizedMobile }),
         },
         token: null,
       });
@@ -79,7 +85,8 @@ export default function VerifyPage() {
         await Swal.fire({
           icon: "success",
           title: "Successfully Verified!",
-          text: data?.message || "Product verified successfully.",
+          // text: data?.message || "Product verified successfully.",
+          text: "Product Name: " + data?.product?.name,
           confirmButtonText: "OK",
           confirmButtonColor: "#16a34a",
         });
@@ -90,8 +97,8 @@ export default function VerifyPage() {
       // ============================================
       else {
         await Swal.fire({
-          icon: "error",
-          title: "Verification Failed",
+          icon: data?.status === "already_verified" ? "warning" : "error",
+          title: data?.status === "already_verified" ? "Already Verified" : "Verification Failed",
           text:
             data?.message ||
             "We could not verify this product.",
@@ -126,6 +133,8 @@ export default function VerifyPage() {
    */
   const handleReset = () => {
     setCode("");
+    setEmail("");
+    setMobile("");
     setResult(null);
     setError("");
   };
@@ -134,62 +143,6 @@ export default function VerifyPage() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-
-      {/* =====================================================
-          HERO
-      ====================================================== */}
-      {/* <section className="relative overflow-hidden bg-black">
-
-
-        <div className="absolute -right-32 -top-32 h-80 w-80 rotate-12 bg-red-600/90" />
-
-        <div className="absolute bottom-0 left-0 h-32 w-full bg-gradient-to-t from-black to-transparent" />
-
-        <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
-
-
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center bg-red-600 text-sm font-black text-white">
-              AR
-            </div>
-
-            <div>
-              <p className="text-sm font-black uppercase tracking-wider text-white">
-                Anabolic Research
-              </p>
-
-              <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
-                Product Authentication
-              </p>
-            </div>
-          </div>
-
-
-          <div className="mt-14 max-w-3xl">
-
-            <div className="mb-5 inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
-              <ShieldCheck className="h-4 w-4 text-red-500" />
-              Official Verification
-            </div>
-
-            <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-7xl">
-              Verify Your
-              <br />
-
-              <span className="text-red-600">
-                Product.
-              </span>
-            </h1>
-
-            <p className="mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-              Check your product's authentication code to confirm that it is
-              genuine and officially verified.
-            </p>
-
-          </div>
-        </div>
-      </section> */}
-
 
       {/* =====================================================
           VERIFICATION AREA
@@ -215,8 +168,7 @@ export default function VerifyPage() {
               </h2>
 
               <p className="mt-2 text-sm leading-6 text-slate-500">
-                Enter the unique authentication code printed on your product
-                or packaging.
+                Enter the unique authentication code printed on your product along with your contact details.
               </p>
 
             </div>
@@ -242,7 +194,7 @@ export default function VerifyPage() {
                   htmlFor="authentication-code"
                   className="mb-2 block text-sm font-bold text-slate-700"
                 >
-                  Authentication Code
+                  Authentication Code <span className="text-red-600">*</span>
                 </label>
 
                 <div className="relative">
@@ -271,6 +223,55 @@ export default function VerifyPage() {
                   Enter the code exactly as shown on your product.
                 </p>
 
+              </div>
+
+              {/* User Email & Mobile Inputs */}
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="user-email"
+                    className="mb-2 block text-sm font-bold text-slate-700"
+                  >
+                    Email Address
+                  </label>
+
+                  <div className="relative">
+                    <input
+                      id="user-email"
+                      name="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@example.com"
+                      disabled={loading}
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 disabled:cursor-not-allowed disabled:bg-slate-100"
+                    />
+                    <Mail className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="user-mobile"
+                    className="mb-2 block text-sm font-bold text-slate-700"
+                  >
+                    Mobile Number
+                  </label>
+
+                  <div className="relative">
+                    <input
+                      id="user-mobile"
+                      name="mobile"
+                      type="tel"
+                      value={mobile}
+                      onChange={(e) => setMobile(e.target.value)}
+                      placeholder="+91 98765 43210"
+                      disabled={loading}
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 disabled:cursor-not-allowed disabled:bg-slate-100"
+                    />
+                    <Phone className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                  </div>
+                </div>
               </div>
 
 
@@ -375,20 +376,18 @@ function VerificationResult({
     <section className="px-6 pb-16 lg:px-8">
 
       <div
-        className={`mx - auto max - w - 7xl overflow - hidden rounded - 2xl border ${
-  isVerified
-    ? "border-green-200 bg-green-50"
-    : "border-red-200 bg-red-50"
-} `}
+        className={`mx-auto max-w-7xl overflow-hidden rounded-2xl border ${isVerified
+          ? "border-green-200 bg-green-50"
+          : "border-red-200 bg-red-50"
+          } `}
       >
 
         {/* Result Header */}
         <div
-          className={`flex flex - col gap - 5 p - 6 sm: flex - row sm: items - center sm: justify - between sm: p - 8 ${
-  isVerified
-    ? "bg-green-600"
-    : "bg-red-600"
-} `}
+          className={`flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8 ${isVerified
+            ? "bg-green-600"
+            : "bg-red-600"
+            } `}
         >
 
           <div className="flex items-center gap-4 text-white">
@@ -492,11 +491,10 @@ function VerificationResult({
                   </p>
 
                   <p
-                    className={`mt - 2 text - 2xl font - black uppercase ${
-  isVerified
-    ? "text-green-700"
-    : "text-red-700"
-} `}
+                    className={`mt-2 text-2xl font-black uppercase ${isVerified
+                      ? "text-green-700"
+                      : "text-red-700"
+                      } `}
                   >
                     {isVerified
                       ? "Authentic"

@@ -58,7 +58,7 @@ export const getVerificationHistory = async (req, res) => {
 
   const [events, total] = await Promise.all([
     VerificationEvent.find(filter)
-      .select('outcome createdAt')
+      .select('outcome createdAt email mobile code')
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit),

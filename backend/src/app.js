@@ -12,6 +12,11 @@ import dashboardRoutes from './routes/dashboard.routes.js';
 import auditLogRoutes from './routes/audit-log.routes.js';
 import env from './config/env.js';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Express application instance.
@@ -32,6 +37,7 @@ app.use(rateLimit({ windowMs: env.RATE_LIMIT_WINDOW_MS, limit: env.RATE_LIMIT_MA
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 app.use(cookieParser());
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
 // Health check (unversioned, per spec: GET /api/health)
 app.use('/api/health', healthRoutes);

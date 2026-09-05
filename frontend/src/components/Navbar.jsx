@@ -6,10 +6,10 @@ const navLinks = [
     name: "Home",
     path: "/",
   },
-  {
-    name: "About",
-    path: "/about",
-  },
+  // {
+  //   name: "About",
+  //   path: "/about",
+  // },
   {
     name: "Authenticity",
     path: "/verify",
@@ -30,7 +30,7 @@ const Navbar = () => {
             to="/"
             className="text-2xl font-bold text-blue-600"
           >
-           <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
+            <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

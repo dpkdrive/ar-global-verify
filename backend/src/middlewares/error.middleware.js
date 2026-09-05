@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import multer from 'multer';
 import { AppError } from '../utils/app-error.js';
 import logger from '../config/logger.js';
 
@@ -15,6 +16,8 @@ export const errorHandler = (err, req, res, next) => { // eslint-disable-line no
     error = new AppError('Invalid resource identifier', 400, 'INVALID_ID');
   } else if (err?.name === 'JsonWebTokenError' || err?.name === 'TokenExpiredError') {
     error = new AppError('Authentication token is invalid or expired', 401, 'UNAUTHORIZED');
+  } else if (err instanceof multer.MulterError) {
+    error = new AppError(err.code === 'LIMIT_FILE_SIZE' ? 'Product image must be 5 MB or smaller' : 'Image upload failed', 422, 'IMAGE_UPLOAD_ERROR');
   }
 
   const statusCode = error.isOperational ? error.statusCode : 500;

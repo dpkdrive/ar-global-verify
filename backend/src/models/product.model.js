@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema({
   sku: { type: String, required: true, trim: true, uppercase: true, maxlength: 80 },
   brand: { type: String, required: true, trim: true, maxlength: 120, index: true },
   description: { type: String, trim: true, maxlength: 5000 },
+  imageUrl: { type: String, trim: true, maxlength: 500 },
   category: { type: String, trim: true, maxlength: 100, index: true },
   batchNumber: { type: String, trim: true, maxlength: 100, index: true },
   authenticationCode: { type: String, required: true, unique: true, trim: true, uppercase: true, immutable: true },

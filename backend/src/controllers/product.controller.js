@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import Product from '../models/product.model.js';
 import VerificationEvent from '../models/verification-event.model.js';
 import { AppError, notFound } from '../utils/app-error.js';
@@ -12,10 +13,12 @@ const ensureAccess = async (id, user) => {
 };
 export const createProduct = async (req, res) => {
   const owner = req.user.role === 'admin' && req.body.owner ? req.body.owner : req.user.id;
+  const imageUrl = req.file ? `/uploads/products/${req.file.filename}` : undefined;
   let product;
   try {
-    product = await Product.create({ ...req.body, owner });
+    product = await Product.create({ ...req.body, ...(imageUrl && { imageUrl }), owner });
   } catch (err) {
+    if (req.file) await fs.unlink(req.file.path).catch(() => {});
     if (err?.code === 11000) {
       const duplicateField = Object.keys(err.keyPattern ?? {})[0];
       const message = duplicateField === 'authenticationCode'
@@ -35,6 +38,16 @@ export const listProducts = async (req, res) => {
   const filter = { ...accessibleFilter(req.user), ...(status && { status }), ...(search && { $text: { $search: search } }) };
   const [products, total] = await Promise.all([Product.find(filter).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).populate('owner', 'name email companyName'), Product.countDocuments(filter)]);
   return sendSuccess(res, { data: { products }, meta: paginationMeta({ page, limit, total }) });
+};
+// Public catalog data deliberately excludes the owner and authentication code.
+export const listPublicProducts = async (req, res) => {
+  const requestedLimit = Number.parseInt(req.query.limit, 10);
+  const limit = Number.isInteger(requestedLimit) ? Math.min(Math.max(requestedLimit, 1), 12) : 6;
+  const products = await Product.find({ status: 'active' })
+    .select('name sku brand description category batchNumber imageUrl createdAt')
+    .sort({ createdAt: -1 })
+    .limit(limit);
+  return sendSuccess(res, { data: { products } });
 };
 export const getProduct = async (req, res) => sendSuccess(res, { data: { product: await ensureAccess(req.params.id, req.user) } });
 export const updateProduct = async (req, res) => {

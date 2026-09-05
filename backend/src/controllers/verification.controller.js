@@ -4,7 +4,7 @@ import VerificationEvent from '../models/verification-event.model.js';
 import { sendSuccess } from '../utils/api-response.js';
 
 const hashIp = (ip) => crypto.createHash('sha256').update(ip ?? '').digest('hex');
-const publicProduct = (product) => ({ id: product.id, name: product.name, brand: product.brand, sku: product.sku, category: product.category, batchNumber: product.batchNumber, description: product.description });
+const publicProduct = (product) => ({ id: product.id, name: product.name, brand: product.brand, sku: product.sku, category: product.category, batchNumber: product.batchNumber, description: product.description, imageUrl: product.imageUrl });
 
 // Always returns 200 so a scanner cannot distinguish a malformed code from a valid one by status alone.
 export const verifyProduct = async (req, res) => {

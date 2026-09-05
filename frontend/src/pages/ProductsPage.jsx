@@ -813,9 +813,17 @@ export default function ProductsPage() {
 
                           <div className="flex items-center gap-3">
 
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 transition group-hover:bg-red-50">
-                              <Boxes className="h-5 w-5 text-slate-500 group-hover:text-red-600" />
-                            </div>
+                            {product.imageUrl ? (
+                              <img
+                                src={product.imageUrl}
+                                alt={`${product.name} product`}
+                                className="h-11 w-11 shrink-0 rounded-xl border border-slate-200 bg-white object-cover"
+                              />
+                            ) : (
+                              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 transition group-hover:bg-red-50">
+                                <Boxes className="h-5 w-5 text-slate-500 group-hover:text-red-600" />
+                              </div>
+                            )}
 
                             <div className="min-w-0">
 

@@ -25,11 +25,12 @@ const refreshAccessToken = async () => {
 };
 
 export const apiRequest = async (path, { method = 'GET', body, token = getStoredToken(), retry = true } = {}) => {
+  const isFormData = body instanceof FormData;
   const response = await fetch(`${API_BASE}${path}`, {
     method,
     credentials: 'include',
-    headers: { ...(body ? { 'Content-Type': 'application/json' } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    headers: { ...(body && !isFormData ? { 'Content-Type': 'application/json' } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    ...(body ? { body: isFormData ? body : JSON.stringify(body) } : {}),
   });
 
   if (response.status === 401 && token && retry) {

@@ -25,7 +25,7 @@ export default function VerifyPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log(result?.product?.name, "name")
+
   /**
    * Handle authentication code input
    */
@@ -159,17 +159,15 @@ export default function VerifyPage() {
             {/* Header */}
             <div className="mb-8">
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-red-600">
+              {/* <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-red-600">
                 <Search className="h-6 w-6" />
-              </div>
+              </div> */}
 
-              <h2 className="mt-6 text-2xl font-black uppercase tracking-tight text-slate-950 sm:text-3xl">
-                Check Authenticity
+              <h2 className="mt-6 text-xl  uppercase tracking-tight text-slate-950 sm:text-3xl text-center">
+                Product Verification
               </h2>
 
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Enter the unique authentication code printed on your product along with your contact details.
-              </p>
+
 
             </div>
 
@@ -210,18 +208,18 @@ export default function VerifyPage() {
                     maxLength={100}
                     autoComplete="off"
                     spellCheck="false"
-                    placeholder="AR-12345-XYZ"
+                    placeholder="Code*"
                     disabled={loading}
                     className="w-full rounded-xl border border-slate-300 bg-white px-4 py-4 pr-12 font-mono text-base font-semibold tracking-wider text-slate-900 uppercase outline-none transition placeholder:font-sans placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 disabled:cursor-not-allowed disabled:bg-slate-100"
                   />
 
-                  <ShieldCheck className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                  {/* <ShieldCheck className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" /> */}
 
                 </div>
 
-                <p className="mt-2 text-xs leading-5 text-slate-400">
+                {/* <p className="mt-2 text-xs leading-5 text-slate-400">
                   Enter the code exactly as shown on your product.
-                </p>
+                </p> */}
 
               </div>
 
@@ -232,7 +230,7 @@ export default function VerifyPage() {
                     htmlFor="user-email"
                     className="mb-2 block text-sm font-bold text-slate-700"
                   >
-                    Email Address
+                    Your Email
                   </label>
 
                   <div className="relative">
@@ -242,11 +240,11 @@ export default function VerifyPage() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@example.com"
+                      placeholder="Your Email"
                       disabled={loading}
                       className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 disabled:cursor-not-allowed disabled:bg-slate-100"
                     />
-                    <Mail className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    {/* <Mail className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" /> */}
                   </div>
                 </div>
 
@@ -265,11 +263,11 @@ export default function VerifyPage() {
                       type="tel"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
-                      placeholder="+91 98765 43210"
+                      placeholder="Your Mobile Number"
                       disabled={loading}
                       className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 disabled:cursor-not-allowed disabled:bg-slate-100"
                     />
-                    <Phone className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    {/* <Phone className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" /> */}
                   </div>
                 </div>
               </div>
@@ -297,25 +295,7 @@ export default function VerifyPage() {
             </form>
 
 
-            {/* Trust indicators */}
-            <div className="mt-8 grid grid-cols-2 gap-3 border-t border-slate-100 pt-7 sm:grid-cols-3">
 
-              <TrustItem
-                icon={ShieldCheck}
-                text="Secure Check"
-              />
-
-              <TrustItem
-                icon={BadgeCheck}
-                text="Official System"
-              />
-
-              <TrustItem
-                icon={PackageCheck}
-                text="Product Check"
-              />
-
-            </div>
 
           </div>
 

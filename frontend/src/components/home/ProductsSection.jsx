@@ -84,74 +84,74 @@ export default function ProductsSection({ products = [], loading = false }) {
           ) : productCount ? (
             <Slider {...settings} className="-mx-3" aria-label="Featured products">
               {products.map((product, index) => (
-              <div key={product._id} className="px-3">
-                <article
-                  className="group overflow-hidden border border-slate-200 bg-white"
-                >
+                <div key={product._id} className="px-3">
+                  <article
+                    className="group overflow-hidden border border-slate-400 bg-white rounded-xl my-4 "
+                  >
 
-                  {/* Image */}
-                  <div className="relative flex h-80 items-center justify-center overflow-hidden bg-slate-900">
+                    {/* Image */}
+                    <div className="relative flex h-80 items-center justify-center overflow-hidden bg-slate-900">
 
-                    <div
-                      className={`absolute inset-0 ${index === 1
-                        ? "bg-red-600"
-                        : "bg-slate-900"
-                        } `}
-                    />
+                      <div
+                        className={`absolute inset-0 ${index === 1
+                          ? "bg-red-600"
+                          : "bg-slate-900"
+                          } `}
+                      />
 
-                    {product.imageUrl ? (
-                      <img src={product.imageUrl} alt={product.name} className="absolute inset-0 h-full w-full object-cover" />
-                    ) : <div className="relative z-10 text-center">
+                      {product.imageUrl ? (
+                        <img src={product.imageUrl} alt={product.name} className="absolute inset-0 h-full w-full object-cover" />
+                      ) : <div className="relative z-10 text-center">
 
-                      <div className="mx-auto flex h-28 w-28 items-center justify-center border-4 border-white">
+                        <div className="mx-auto flex h-28 w-28 items-center justify-center border-4 border-white">
 
-                        <span className="text-3xl font-black text-white">
-                          AR
-                        </span>
+                          <span className="text-3xl font-black text-white">
+                            AR
+                          </span>
 
-                      </div>
+                        </div>
 
-                      <p className="mt-5 text-xs font-bold uppercase tracking-[0.25em] text-white">
-                        Anabolic Research
+                        <p className="mt-5 text-xs font-bold uppercase tracking-[0.25em] text-white">
+                          Anabolic Research
+                        </p>
+
+                      </div>}
+
+                      {/* <span className="absolute left-4 top-4 z-10 bg-white px-3 py-1 text-[10px] font-black uppercase tracking-widest">
+                      Product {String(index + 1).padStart(2, "0")}
+                    </span> */}
+
+                    </div>
+
+
+                    {/* Content */}
+                    <div className="p-6">
+
+                      <p className="text-xs font-bold uppercase tracking-widest text-red-600">
+                        {product.category}
                       </p>
 
-                    </div>}
+                      <h3 className="mt-2 text-lg  ">
+                        {product.name}
+                      </h3>
 
-                    <span className="absolute left-4 top-4 z-10 bg-white px-3 py-1 text-[10px] font-black uppercase tracking-widest">
-                      Product {String(index + 1).padStart(2, "0")}
-                    </span>
+                      {/* <button
+                        type="button"
+                        className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider transition group-hover:text-red-600"
+                      >
+                        Explore Product
 
-                  </div>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </button> */}
 
+                    </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-
-                    <p className="text-xs font-bold uppercase tracking-widest text-red-600">
-                      {product.category}
-                    </p>
-
-                    <h3 className="mt-2 text-2xl font-black uppercase">
-                      {product.name}
-                    </h3>
-
-                    <button
-                      type="button"
-                      className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider transition group-hover:text-red-600"
-                    >
-                      Explore Product
-
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </button>
-
-                  </div>
-
-                </article>
-              </div>
+                  </article>
+                </div>
               ))}
             </Slider>
           ) : (
-              <p className="text-sm font-medium text-slate-500">No products are available right now.</p>
+            <p className="text-sm font-medium text-slate-500">No products are available right now.</p>
           )}
         </div>
 

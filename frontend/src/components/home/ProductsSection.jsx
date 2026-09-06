@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import ReactSlick from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { resolveAssetUrl } from '../../api';
 
 // react-slick is CommonJS. In this Vite setup its default import is a module
 // wrapper, while the actual React component is nested under `.default`.
@@ -100,7 +101,7 @@ export default function ProductsSection({ products = [], loading = false }) {
                       />
 
                       {product.imageUrl ? (
-                        <img src={product.imageUrl} alt={product.name} className="absolute inset-0 h-full w-full object-cover" />
+                        <img src={resolveAssetUrl(product.imageUrl)} alt={product.name} className="absolute inset-0 h-full w-full object-cover" />
                       ) : <div className="relative z-10 text-center">
 
                         <div className="mx-auto flex h-28 w-28 items-center justify-center border-4 border-white">

@@ -1,5 +1,12 @@
 const API_BASE = import.meta.env.VITE_API_URL ?? '/api/v1';
 
+// API images are relative to the backend, not to the Vercel frontend domain.
+export const resolveAssetUrl = (url) => {
+  if (!url || /^https?:\/\//i.test(url)) return url;
+  const backendOrigin = API_BASE.replace(/\/api\/v1\/?$/, '');
+  return `${backendOrigin}${url.startsWith('/') ? url : `/${url}`}`;
+};
+
 export class ApiError extends Error {
   constructor(message, status, details = []) {
     super(message);

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import Swal from "sweetalert2";
 
-import { apiRequest } from "../api";
+import { apiRequest, resolveAssetUrl } from "../api";
 import {
   EmptyState,
   Modal,
@@ -815,7 +815,7 @@ export default function ProductsPage() {
 
                             {product.imageUrl ? (
                               <img
-                                src={product.imageUrl}
+                                src={resolveAssetUrl(product.imageUrl)}
                                 alt={`${product.name} product`}
                                 className="h-11 w-11 shrink-0 rounded-xl border border-slate-200 bg-white object-cover"
                               />

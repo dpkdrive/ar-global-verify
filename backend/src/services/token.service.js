@@ -14,4 +14,12 @@ export const createRefreshToken = (user) => jwt.sign(
 );
 
 export const verifyRefreshToken = (token) => jwt.verify(token, env.JWT_REFRESH_SECRET);
-export const refreshCookieOptions = { httpOnly: true, secure: env.IS_PRODUCTION, sameSite: 'strict', path: '/api/v1/auth', maxAge: 7 * 24 * 60 * 60 * 1000 };
+// Vercel and Render use different sites. Cross-site refresh cookies therefore
+// require SameSite=None plus Secure in production; local development remains strict.
+export const refreshCookieOptions = {
+  httpOnly: true,
+  secure: env.IS_PRODUCTION,
+  sameSite: env.IS_PRODUCTION ? 'none' : 'strict',
+  path: '/api/v1/auth',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};

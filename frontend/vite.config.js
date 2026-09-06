@@ -5,10 +5,14 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(),
-    tailwindcss(),
+  tailwindcss(),
   ],
+  base: '/',
+  build: {
+    outDir: 'dist',
+  },
   server: {
-    port: 3000,
+    port: 5173,
     proxy: { '/api': 'http://localhost:5000', '/uploads': 'http://localhost:5000' },
   },
 })

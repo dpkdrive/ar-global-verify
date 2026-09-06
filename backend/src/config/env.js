@@ -42,6 +42,11 @@ const env = {
   REFRESH_TOKEN_EXPIRES_IN: optional('REFRESH_TOKEN_EXPIRES_IN', '7d'),
 
   CLIENT_URL: optional('CLIENT_URL', 'http://localhost:3000'),
+  // Comma-separated allow-list. Keep CLIENT_URL for backwards compatibility.
+  CLIENT_URLS: optional('CLIENT_URLS', optional('CLIENT_URL', 'http://localhost:3000'))
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
   COOKIE_DOMAIN: optional('COOKIE_DOMAIN', 'localhost'),
 
   RATE_LIMIT_WINDOW_MS: parseInt(optional('RATE_LIMIT_WINDOW_MS', '900000'), 10),

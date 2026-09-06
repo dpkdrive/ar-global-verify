@@ -3,6 +3,12 @@ import env from './config/env.js';
 import logger from './config/logger.js';
 import { connectDB, disconnectDB } from './config/db.js';
 
+
+import dns from "dns"
+dns.setDefaultResultOrder("ipv4first");
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+
 let server;
 
 const start = async () => {

@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import VerifyPage from './pages/VerifyPage';
 import DashboardPage from './pages/DashboardPage';
 import ProductsPage from './pages/ProductsPage';
+import GenerateCodesPage from './pages/GenerateCodesPage';
 import AddProductPage from './pages/AddProductPage';
 import SettingsPage from './pages/SettingsPage';
 import RiskMonitorPage from './pages/RiskMonitorPage';
@@ -27,6 +28,7 @@ export default function App() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="products" element={<ProductsPage />} />
+        <Route path="generate-codes" element={<GenerateCodesPage />} />
         <Route path="products/add" element={<AddProductPage />} />
         <Route path="risk-monitor" element={<RiskMonitorPage />} />
         <Route path="activity" element={<AuditPage />} />

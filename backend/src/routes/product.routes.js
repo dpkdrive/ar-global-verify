@@ -12,7 +12,7 @@ const router = Router();
 router.get('/public', asyncHandler(listPublicProducts));
 router.use(requireAuth, authorize('admin', 'manufacturer'));
 router.route('/').get(validate(listProductsSchema), asyncHandler(listProducts)).post(uploadProductImage, validate(createProductSchema), asyncHandler(createProduct));
-router.post('/:id/codes', authorize('admin'), validate(generateProductCodesSchema), asyncHandler(generateProductCodes));
+router.post('/:id/codes', authorize('admin', 'manufacturer'), validate(generateProductCodesSchema), asyncHandler(generateProductCodes));
 router.get('/:id/verifications', validate(verificationHistorySchema), asyncHandler(getVerificationHistory));
 router.route('/:id').get(validate(productIdSchema), asyncHandler(getProduct)).patch(validate(updateProductSchema), asyncHandler(updateProduct)).delete(validate(productIdSchema), asyncHandler(deleteProduct));
 export default router;

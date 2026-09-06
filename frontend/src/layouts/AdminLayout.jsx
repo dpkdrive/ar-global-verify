@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
   Activity,
   Boxes,
+  KeyRound,
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
@@ -26,6 +27,11 @@ const navigation = [
     path: "/admin/products",
     label: "Products",
     icon: Boxes,
+  },
+  {
+    path: "/admin/generate-codes",
+    label: "Generate Codes",
+    icon: KeyRound,
   },
   {
     path: "/admin/risk-monitor",

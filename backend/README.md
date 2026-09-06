@@ -16,6 +16,7 @@ Authenticated endpoints require `Authorization: Bearer <access-token>`.
 | Auth | `PATCH /api/v1/auth/change-password` | Signed in | Change password and invalidate earlier sessions |
 | Products | `GET, POST /api/v1/products` | Manufacturer/Admin | List or create owned products |
 | Products | `GET, PATCH, DELETE /api/v1/products/:id` | Manufacturer/Admin | Read, update, or remove an owned product |
+| Product codes | `POST /api/v1/products/:id/codes` | Manufacturer/Admin | Generate a batch of 1–500 unique, verification-ready codes |
 | Products | `GET /api/v1/products/:id/verifications` | Manufacturer/Admin | Paginated verification history for an owned product |
 | Verification | `POST /api/v1/verify` | Public | Verify an authentication code and record a privacy-safe event |
 | Dashboard | `GET /api/v1/dashboard/summary` | Manufacturer/Admin | Product totals, verification totals, and recent activity |
@@ -26,6 +27,14 @@ Authenticated endpoints require `Authorization: Bearer <access-token>`.
 
 Manufacturers can only access their own products. Administrators can manage all
 products and users. Product authentication codes are immutable once issued.
+
+### Bulk code generation
+
+Select an existing product ID, then call `POST /api/v1/products/:id/codes` with
+`{ "quantity": 100 }`. Each physical unit receives a cryptographically random,
+unique code. The raw codes are returned only once in the creation response;
+only HMAC hashes are stored in the database. Each returned code can be entered
+into `POST /api/v1/verify` for public verification.
 
 ### First administrator
 
